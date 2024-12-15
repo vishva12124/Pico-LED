@@ -10,6 +10,11 @@
 
 const int NUM_PIXELS = 20;
 
+const int rainbowLightDelay = 20; 
+const int fadingLightDelay = 2;
+const int patternLightDelay = 30;
+const int flashingLightDelay = 500;
+
 bool irq_flag = false, direction = true;
 float i, constant, r, g, b;
 int mode, brightness, step, stringy[5];

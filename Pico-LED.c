@@ -1,5 +1,3 @@
-//#include "pico/stdlib.h"
-//#include "ws2812.pio.h"
 #include "led_buffer.h"
 #include "Colour Functions.h"
 #include "Constants.h"
