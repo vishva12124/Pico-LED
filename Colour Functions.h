@@ -1,3 +1,5 @@
+
+#include "led_buffer.h"
 #include "Constants.h"
 
 void emitStaticColourAll(int r, int g, int b, int brightness)
@@ -25,7 +27,7 @@ void turnOffAllLights()
 
 void flashingLights(int r, int g, int b, int brightness)
 {
-  while (irq_flag == false)
+  while (irq_flag != true)
   {
     emitStaticColourAll(r, g, b, brightness);
     sleep_ms(flashingLightDelay);
@@ -68,18 +70,33 @@ void fadingLights(int r, int g, int b, int brightness)
 void patternLights(int r, int g, int b, int brightness)
 {
   turnOffAllLights();
-  emitStaticColour(r, g, b, 0, 100);
-  while (irq_flag == false) {
-
-    for (int x = 1; x < NUM_PIXELS; x++) {
-      sleep_ms(patternLightDelay);
-      emitStaticColour(r, g, b, x, 100);
-      emitStaticColour(0, 0, 0, x - 1, 100);
+  i = 1;
+  int x = 0;
+  direction = true;
+  while (irq_flag == false)
+  {
+    emitStaticColour(r, g, b, i, brightness);
+    emitStaticColour(0, 0, 0, x, brightness);
+    sleep_ms(patternLightDelay);
+    if (i == NUM_PIXELS)
+    {
+      direction = false;
+      x = NUM_PIXELS + 1;
     }
-    for (int x = NUM_PIXELS; x >= 0; x--) {
-      sleep_ms(patternLightDelay);
-      emitStaticColour(r, g, b, x - 1, 100);
-      emitStaticColour(0, 0, 0, x, 100);
-    }    
+    else if (i == 0 && direction == false)
+    {
+      direction = true;
+      x = -1;
+    }
+    if (direction == false)
+    {
+      i--;
+      x--;
+    }
+    else if (direction == true)
+    {
+      i++;
+      x++;
+    }
   }
 }

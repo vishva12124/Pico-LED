@@ -1,5 +1,9 @@
+#ifndef led_buffer_H_
+#define led_buffer_H_
+
 #include "ws2812.pio.h"
 #include "Constants.h"
+#include "pico/stdlib.h"
 
 struct LEDValues {
     int r;
@@ -29,10 +33,12 @@ void storeLEDValues(int pixelIndex, int r, int g, int b) {
 
 void setColour()
 {
-  sleep_ms(3);
+  sleep_ms(1);
   for (int i = 0; i < NUM_PIXELS; i++)
   {
     uint32_t colour_set = urgb_u32((RGB[i].r), (RGB[i].g), (RGB[i].b));
     put_pixel(colour_set);
   }
 }
+
+#endif

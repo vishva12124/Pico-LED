@@ -39,7 +39,10 @@
     "files.associations": {
         "stdlib.h": "c",
         "ws2812.pio.h": "c",
-        "led_buffer.h": "c"
+        "led_buffer.h": "c",
+        "colour functions.h": "c",
+        "constants.h": "c",
+        "system functions.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

@@ -15,7 +15,7 @@ const int fadingLightDelay = 2;
 const int patternLightDelay = 30;
 const int flashingLightDelay = 500;
 
-bool irq_flag = false, direction = true;
+bool irq_flag = false, direction = true, ledToggle = false, receivedData = false, ranOnce = false;
 float i, constant, r, g, b;
 int mode, brightness, step, stringy[5];
 
