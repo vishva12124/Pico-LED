@@ -29,6 +29,5 @@ void printValues()
 
 void interrupt()
 {
-    //ledToggle = !(ledToggle);
     irq_flag = true;
 }

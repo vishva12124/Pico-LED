@@ -1,6 +1,9 @@
 
 #include "led_buffer.h"
 #include "Constants.h"
+#include <math.h>
+
+struct LEDValues rainbow;
 
 void emitStaticColourAll(int r, int g, int b, int brightness)
 {
@@ -10,9 +13,8 @@ void emitStaticColourAll(int r, int g, int b, int brightness)
   setColour();
 }
 
-void emitStaticColour(int r, int g, int b, int ledIndex, int brightness)
+void emitStaticColour()
 {
-  storeLEDValues(ledIndex, r, g, b);
   setColour();
 }
 
@@ -36,12 +38,20 @@ void flashingLights(int r, int g, int b, int brightness)
   }
 }
 
+void getRGBValues(double time, double frequency) {
+  int phase_r = 0, phase_g = 2, phase_b = 4;
+  rainbow.r = pow((127.5 * (cos(frequency * time + phase_r) + 1)), 1);
+  rainbow.g = pow((127.5 * (cos(frequency * time + phase_g) + 1)), 1);
+  rainbow.b = pow((127.5 * (cos(frequency * time + phase_b) + 1)), 1);
+}
+
 void rainbowLights(int brightness) {
+  double startTime = time_us_32();  
   while (irq_flag == false) {
-    for (int x = 0; x < 254; x++) {
-      emitStaticColourAll(x, ((x + 85) % 255), ((x + 170) % 255), 100);
-      sleep_ms(rainbowLightDelay);
-    }    
+    double timeDifference = time_us_32() - startTime;
+    getRGBValues(timeDifference, 0.05);
+    emitStaticColourAll(rainbow.r, rainbow.g, rainbow.b, 100);
+    sleep_ms(50);
   }
 }
 
@@ -75,8 +85,10 @@ void patternLights(int r, int g, int b, int brightness)
   direction = true;
   while (irq_flag == false)
   {
-    emitStaticColour(r, g, b, i, brightness);
-    emitStaticColour(0, 0, 0, x, brightness);
+    storeLEDValues(i, r, g, b);
+    emitStaticColour();
+    storeLEDValues(x, 0, 0, 0);
+    emitStaticColour();
     sleep_ms(patternLightDelay);
     if (i == NUM_PIXELS)
     {
