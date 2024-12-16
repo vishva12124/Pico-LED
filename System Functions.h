@@ -40,6 +40,11 @@ void interrupt()
     irq_flag = true;
 }
 
+void resetVariables() {
+    irq_flag = false, direction = true;
+    brightness = mode = r = g = b = i = 0;
+}
+
 void setup() {
   stdio_init_all();
   PIO pio = pio0;

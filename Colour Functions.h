@@ -60,16 +60,52 @@ void fadingLights(int r, int g, int b, int brightness)
   
   while (irq_flag == false) {
     for (int x = 0; x != 250; x++) {
-        r = (r == 0) ? (0) : (r-1);
-        g = (g == 0) ? (0) : (g-1);
-        b = (b == 0) ? (0) : (b-1);
+      switch (r) {
+        case 0:
+          break;
+        default:
+          r--;
+          break;
+      }
+      switch (g) {
+        case 0:
+          break;
+        default:
+          g--;
+          break;
+      }
+      switch (b) {
+        case 0:
+          break;
+        default:
+          b--;
+          break;
+      }  
         emitStaticColourAll(r, g, b, 100);
         sleep_ms(fadingLightDelay);
     }
     for (int x = 250; x > 0; x--) {
-        r = (r == 0) ? (0) : (r+1);
-        g = (g == 0) ? (0) : (g+1);
-        b = (b == 0) ? (0) : (b+1);
+      switch (r) {
+        case 0:
+          break;
+        default:
+          r++;
+          break;
+      }
+      switch (g) {
+        case 0:
+          break;
+        default:
+          g++;
+          break;
+      }
+      switch (b) {
+        case 0:
+          break;
+        default:
+          b++;
+          break;
+      }  
         emitStaticColourAll(r, g, b, 100);
         sleep_ms(fadingLightDelay);
     }    
@@ -90,6 +126,7 @@ void patternLights(int r, int g, int b, int brightness)
     storeLEDValues(x, 0, 0, 0);
     emitStaticColour();
     sleep_ms(patternLightDelay);
+
     if (i == NUM_PIXELS)
     {
       direction = false;
@@ -100,15 +137,16 @@ void patternLights(int r, int g, int b, int brightness)
       direction = true;
       x = -1;
     }
-    if (direction == false)
-    {
-      i--;
-      x--;
-    }
-    else if (direction == true)
-    {
-      i++;
-      x++;
+
+    switch (direction) {
+      case 0:
+        i--;
+        x--;
+        break;
+      case 1:
+        i++;
+        x++;
+        break;
     }
   }
 }

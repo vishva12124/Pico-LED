@@ -7,9 +7,7 @@ void runColourFunctions()
   if (uart_is_readable(UART_ID))
   {
     turnOffAllLights();
-    irq_flag = false, direction = true;
-    brightness = mode = r = g = b = i = 0;
-
+    resetVariables();
     getUserInput();
     printValues();
 
