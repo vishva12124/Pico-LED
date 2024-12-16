@@ -60,16 +60,16 @@ void fadingLights(int r, int g, int b, int brightness)
   
   while (irq_flag == false) {
     for (int x = 0; x != 250; x++) {
-        r--;
-        g--;
-        b--;
+        r = (r == 0) ? (0) : (r-1);
+        g = (g == 0) ? (0) : (g-1);
+        b = (b == 0) ? (0) : (b-1);
         emitStaticColourAll(r, g, b, 100);
         sleep_ms(fadingLightDelay);
     }
     for (int x = 250; x > 0; x--) {
-        r++;
-        g++;
-        b++;
+        r = (r == 0) ? (0) : (r+1);
+        g = (g == 0) ? (0) : (g+1);
+        b = (b == 0) ? (0) : (b+1);
         emitStaticColourAll(r, g, b, 100);
         sleep_ms(fadingLightDelay);
     }    
