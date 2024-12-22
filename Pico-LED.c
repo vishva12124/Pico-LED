@@ -27,6 +27,9 @@ void runColourFunctions()
       case 5:
         patternLights(r, g, b, brightness);
         break;
+      case 6:
+        blueAndOrange();
+        break;
     }
   }
 }

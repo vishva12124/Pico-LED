@@ -2,37 +2,28 @@
 #include "ws2812.pio.h"
 #include "Constants.h"
 
+uint8_t rgb[2],
+    
+
 void printValues()
 {
-   
-    sprintf(stringy, "%d", brightness);
-    printf(stringy);
-    printf("\nBrightness:\n\n");
-
-    sprintf(stringy, "%d", mode);
-    printf(stringy);
-    printf("\nMode:\n\n");
-
-    sprintf(stringy, "%f", r);
-    printf(stringy);
-    printf("\nR:\n\n");
-
-    sprintf(stringy, "%f", g);
-    printf(stringy);
-    printf("\nG:\n\n");
-
-    sprintf(stringy, "%f", b);
-    printf(stringy);
-    printf("\nB:\n\n");
- 
+    printf("Brightness: %d\n", brightness);
+    printf("Mode: %d\n", mode);
+    printf("R: %d\n", r);
+    printf("G: %d\n", g);
+    printf("B: %d\n", b);
 }
+*/
 
 void getUserInput() {
-    brightness = uart_getc(UART_ID);
-    mode = uart_getc(UART_ID);
-    r = uart_getc(UART_ID);
-    g = uart_getc(UART_ID);
-    b = uart_getc(UART_ID);    
+    uart_read_blocking(UART_ID, &buffer, 1);
+    uart_read_blocking(UART_ID, (int *) &mode, 1);
+    uart_read_blocking(UART_ID, (int *) &r, 2);
+    r = buffer[0] + buffer[1];
+    uart_read_blocking(UART_ID, (int *) &g, 2);
+    g = buffer[0] + buffer[1];
+    uart_read_blocking(UART_ID, (int *) &b, 2);
+    r = buffer[0] + buffer[1];
 }
 
 void interrupt()
@@ -42,7 +33,7 @@ void interrupt()
 
 void resetVariables() {
     irq_flag = false, direction = true;
-    brightness = mode = r = g = b = i = 0;
+    brightness = mode = r = g = b = 0;
 }
 
 void setup() {

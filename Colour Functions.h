@@ -38,23 +38,21 @@ void flashingLights(int r, int g, int b, int brightness)
   }
 }
 
-void getRGBValues(double time, double frequency) {
-  int phase_r = 0, phase_g = 2, phase_b = 4;
-  rainbow.r = pow((127.5 * (cos(frequency * time + phase_r) + 1)), 1);
-  rainbow.g = pow((127.5 * (cos(frequency * time + phase_g) + 1)), 1);
-  rainbow.b = pow((127.5 * (cos(frequency * time + phase_b) + 1)), 1);
+void updateRGBValues(double time, double frequency) {
+  double r_translation = 0.002, g_translation = 1.3, b_translation = 3.1;
+  rainbow.r = pow((127.5 * (cos(frequency * time + r_translation) + 1)), 0.999);
+  rainbow.g = pow((127.5 * (cos(frequency * time + g_translation) + 1)), 0.999);
+  rainbow.b = pow((127.5 * (cos(frequency * time + b_translation) + 1)), 0.999);
 }
-
 void rainbowLights(int brightness) {
   double startTime = time_us_32();  
   while (irq_flag == false) {
     double timeDifference = time_us_32() - startTime;
-    getRGBValues(timeDifference, 0.05);
+    updateRGBValues(timeDifference, 0.005);
     emitStaticColourAll(rainbow.r, rainbow.g, rainbow.b, 100);
-    sleep_ms(50);
+    sleep_ms(40);
   }
 }
-
 void fadingLights(int r, int g, int b, int brightness)
 {
   
@@ -112,12 +110,21 @@ void fadingLights(int r, int g, int b, int brightness)
   }
 }
 
+void blueAndOrange() {
+while (irq_flag == false) {
+  emitStaticColourAll(0, 0, 255, 100);
+  sleep_ms(blueAndOrangeDelay);
+  emitStaticColourAll(255, 106, 10, 100);
+  sleep_ms(blueAndOrangeDelay);
+}
+
+}
+
 
 void patternLights(int r, int g, int b, int brightness)
 {
   turnOffAllLights();
-  i = 1;
-  int x = 0;
+  int x = 0, i = 1;
   direction = true;
   while (irq_flag == false)
   {
