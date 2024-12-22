@@ -2,12 +2,14 @@
 #include "led_buffer.h"
 #include "Constants.h"
 #include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 struct LEDValues rainbow;
 
-void emitStaticColourAll(int r, int g, int b, int brightness)
+void emitStaticColourAll(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
 {
-  for (int x = 0; x != NUM_PIXELS; x++) {
+  for (uint8_t x = 0; x != NUM_PIXELS; x++) {
     storeLEDValues(x, r, g, b);
   }
   setColour();
@@ -20,14 +22,14 @@ void emitStaticColour()
 
 void turnOffAllLights()
 {
-  for (int x = 0; x < NUM_PIXELS; x++)
+  for (uint8_t x = 0; x < NUM_PIXELS; x++)
   {
     storeLEDValues(x, 0, 0, 0);
   }
   setColour();
 }
 
-void flashingLights(int r, int g, int b, int brightness)
+void flashingLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
 {
   while (irq_flag != true)
   {
@@ -44,7 +46,7 @@ void updateRGBValues(double time, double frequency) {
   rainbow.g = pow((127.5 * (cos(frequency * time + g_translation) + 1)), 0.999);
   rainbow.b = pow((127.5 * (cos(frequency * time + b_translation) + 1)), 0.999);
 }
-void rainbowLights(int brightness) {
+void rainbowLights(uint8_t brightness) {
   double startTime = time_us_32();  
   while (irq_flag == false) {
     double timeDifference = time_us_32() - startTime;
@@ -53,11 +55,13 @@ void rainbowLights(int brightness) {
     sleep_ms(40);
   }
 }
-void fadingLights(int r, int g, int b, int brightness)
+
+
+void fadingLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
 {
   
   while (irq_flag == false) {
-    for (int x = 0; x != 250; x++) {
+    for (uint8_t x = 0; x != 250; x++) {
       switch (r) {
         case 0:
           break;
@@ -82,7 +86,7 @@ void fadingLights(int r, int g, int b, int brightness)
         emitStaticColourAll(r, g, b, 100);
         sleep_ms(fadingLightDelay);
     }
-    for (int x = 250; x > 0; x--) {
+    for (uint8_t x = 250; x > 0; x--) {
       switch (r) {
         case 0:
           break;
@@ -121,10 +125,10 @@ while (irq_flag == false) {
 }
 
 
-void patternLights(int r, int g, int b, int brightness)
+void patternLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
 {
   turnOffAllLights();
-  int x = 0, i = 1;
+  uint8_t x = 0, i = 1;
   direction = true;
   while (irq_flag == false)
   {

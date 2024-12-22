@@ -18,9 +18,45 @@
             }
         },
         {
+            "label": "Restart Pico",
+            "type": "process",
+            "command": "${env:HOME}/.pico-sdk/picotool/2.1.0/picotool/picotool",
+            "args": [
+                "reboot",
+                "-f"
+            ],            
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": [],
+            "windows": {
+                "command": "${env:USERPROFILE}/.pico-sdk/picotool/2.1.0/picotool/picotool.exe"
+            }
+        },                
+        {
+            "label": "Reboot Pico",
+            "type": "process",
+            "command": "${env:HOME}/.pico-sdk/picotool/2.1.0/picotool/picotool",
+            "args": [
+                "reboot",
+                "-f",
+                "-u"
+            ],            
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": [],
+            "windows": {
+                "command": "${env:USERPROFILE}/.pico-sdk/picotool/2.1.0/picotool/picotool.exe"
+            }
+        },        
+        {
             "label": "Run Project",
             "type": "process",
             "command": "${env:HOME}/.pico-sdk/picotool/2.1.0/picotool/picotool",
+            "dependsOn": "Reboot Pico",
             "args": [
                 "load",
                 "${command:raspberry-pi-pico.launchTargetPath}",

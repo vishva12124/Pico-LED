@@ -1,29 +1,28 @@
 #include "pico/stdlib.h"
 #include "ws2812.pio.h"
 #include "Constants.h"
+#include <stdio.h>
 
-uint8_t rgb[2],
+uint8_t rgb[2];
     
-
 void printValues()
 {
-    printf("Brightness: %d\n", brightness);
+    printf("\nBrightness: %d\n", brightness);
     printf("Mode: %d\n", mode);
     printf("R: %d\n", r);
     printf("G: %d\n", g);
     printf("B: %d\n", b);
 }
-*/
 
 void getUserInput() {
-    uart_read_blocking(UART_ID, &buffer, 1);
-    uart_read_blocking(UART_ID, (int *) &mode, 1);
-    uart_read_blocking(UART_ID, (int *) &r, 2);
-    r = buffer[0] + buffer[1];
-    uart_read_blocking(UART_ID, (int *) &g, 2);
-    g = buffer[0] + buffer[1];
-    uart_read_blocking(UART_ID, (int *) &b, 2);
-    r = buffer[0] + buffer[1];
+    uart_read_blocking(UART_ID, (uint8_t *)&brightness, 1);
+    uart_read_blocking(UART_ID, (uint8_t *) &mode, 1);
+    uart_read_blocking(UART_ID, rgb, 2);
+    r = rgb[0] + rgb[1];
+    uart_read_blocking(UART_ID, rgb, 2);
+    g = rgb[0] + rgb[1];
+    uart_read_blocking(UART_ID, rgb, 2);
+    b = rgb[0] + rgb[1];
 }
 
 void interrupt()

@@ -8,16 +8,15 @@
 #define IRQ_PIN 3
 #define PIXELS 20
 
-const int NUM_PIXELS = 20;
+const char NUM_PIXELS = 20;
 
-const int rainbowLightDelay = 20; 
-const int fadingLightDelay = 2;
-const int patternLightDelay = 30;
-const int flashingLightDelay = 500;
-const int blueAndOrangeDelay = 500;
+const uint32_t rainbowLightDelay = 20; 
+const uint32_t fadingLightDelay = 2;
+const uint32_t patternLightDelay = 30;
+const uint32_t flashingLightDelay = 500;
+const uint32_t blueAndOrangeDelay = 500;
 
-bool irq_flag = false, direction = true, ledToggle = false;
-int r, g, b;
-int mode, brightness, step, stringy[5];
+bool irq_flag = false, direction = true;
+uint8_t r, g, b, mode, brightness;
 
 #endif
