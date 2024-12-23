@@ -35,5 +35,20 @@
     "raspberry-pi-pico.cmakeAutoConfigure": true,
     "raspberry-pi-pico.useCmakeTools": false,
     "raspberry-pi-pico.cmakePath": "${HOME}/.pico-sdk/cmake/v3.29.9/bin/cmake",
-    "raspberry-pi-pico.ninjaPath": "${HOME}/.pico-sdk/ninja/v1.12.1/ninja"
+    "raspberry-pi-pico.ninjaPath": "${HOME}/.pico-sdk/ninja/v1.12.1/ninja",
+    "files.associations": {
+        "stdlib.h": "c",
+        "sleep.h": "c",
+        "rosc.h": "c",
+        "stdio.h": "c",
+        "time.h": "c",
+        "sync.h": "c",
+        "pll.h": "c",
+        "watchdog.h": "c",
+        "clocks.h": "c",
+        "scb.h": "c",
+        "powman.h": "c",
+        "xosc.h": "c",
+        "system functions.h": "c"
+    }
 }

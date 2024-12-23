@@ -17,6 +17,7 @@ const uint32_t flashingLightDelay = 500;
 const uint32_t blueAndOrangeDelay = 500;
 
 bool irq_flag = false, direction = true;
-uint8_t r, g, b, mode, brightness;
+uint8_t r, g, b, mode, brightness,
+        scb_orig, clock0_orig, clock1_orig;
 
 #endif
