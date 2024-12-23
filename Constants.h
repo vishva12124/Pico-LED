@@ -6,6 +6,7 @@
 #define UART_RX_PIN 1
 #define WS2812_PIN 2
 #define IRQ_PIN 3
+#define SLEEP_PIN 4
 #define PIXELS 20
 
 const char NUM_PIXELS = 20;

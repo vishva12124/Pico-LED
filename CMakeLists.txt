@@ -79,7 +79,7 @@ pico_enable_stdio_usb(Pico-LED 1)
 target_link_libraries(Pico-LED
         pico_stdlib)
 
-# Add the standard include files to the build
+# Add the standard include files to the build 
 target_include_directories(Pico-LED PRIVATE
   ${CMAKE_CURRENT_LIST_DIR}
 )

@@ -29,6 +29,7 @@ void turnOffAllLights()
   setColour();
 }
 
+/*
 void flashingLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
 {
   while (irq_flag != true)
@@ -36,6 +37,17 @@ void flashingLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
     emitStaticColourAll(r, g, b, brightness);
     sleep_ms(flashingLightDelay);
     turnOffAllLights();
+    sleep_ms(flashingLightDelay);
+  }
+}
+*/
+
+void flashingLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
+{
+  while (irq_flag != true) {
+    gpio_put(25, true);
+    sleep_ms(flashingLightDelay);
+    gpio_put(25, false);
     sleep_ms(flashingLightDelay);
   }
 }

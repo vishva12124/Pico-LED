@@ -26,6 +26,16 @@ void printValues()
     uint32_t f_clk_adc;
     uint32_t f_clk_rtc;
 
+    uint32_t g_pll_sys;
+    uint32_t g_pll_usb;
+    uint32_t g_rosc;
+    uint32_t g_clk_sys; 
+    uint32_t g_clk_peri;
+    uint32_t g_clk_usb;
+    uint32_t g_clk_adc;
+    uint32_t g_clk_rtc;
+
+
 void printClocks() {
     f_pll_sys = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_PLL_SYS_CLKSRC_PRIMARY);
     f_pll_usb = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_PLL_USB_CLKSRC_PRIMARY);
@@ -47,14 +57,14 @@ void printClocks() {
 }
 
 void compareClocks() {
-    uint32_t g_pll_sys = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_PLL_SYS_CLKSRC_PRIMARY);
-    uint32_t g_pll_usb = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_PLL_USB_CLKSRC_PRIMARY);
-    uint32_t g_rosc = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_ROSC_CLKSRC);
-    uint32_t g_clk_sys = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_SYS);
-    uint32_t g_clk_peri = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_PERI);
-    uint32_t g_clk_usb = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_USB);
-    uint32_t g_clk_adc = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_ADC);
-    uint32_t g_clk_rtc = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_RTC);
+     g_pll_sys = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_PLL_SYS_CLKSRC_PRIMARY);
+     g_pll_usb = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_PLL_USB_CLKSRC_PRIMARY);
+     g_rosc = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_ROSC_CLKSRC);
+     g_clk_sys = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_SYS);
+     g_clk_peri = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_PERI);
+     g_clk_usb = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_USB);
+     g_clk_adc = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_ADC);
+     g_clk_rtc = frequency_count_khz(CLOCKS_FC0_SRC_VALUE_CLK_RTC);
     
     if (g_pll_sys != f_pll_sys) {
         //gpio_put(25, true); //works 
@@ -63,10 +73,10 @@ void compareClocks() {
         //gpio_put(25, true); //works
     }
     if (g_rosc > f_rosc) {
-        gpio_put(25, true); //DOES NOT WORK
+        //gpio_put(25, true); //DOES NOT WORK
     }    
-    if (g_clk_sys != f_clk_sys) {
-        //gpio_put(25, true); //works
+    if (g_clk_sys > f_clk_sys) {
+        gpio_put(25, true); //works
     }    
     if (g_clk_peri != f_clk_peri) {
         //gpio_put(25, true); //works
@@ -93,9 +103,14 @@ void getUserInput() {
     b = rgb[0] + rgb[1];
 }
 
+bool toggle = false;
+
 void interrupt()
 {
     irq_flag = true;
+    toggle = !(toggle);
+    //gpio_put(25, toggle);
+
 }
 
 void resetVariables() {
@@ -109,24 +124,28 @@ void setup() {
   PIO pio = pio0;
   int sm = 0;
   uint offset = pio_add_program(pio, &ws2812_program);
-  ws2812_program_init(pio, sm, offset, WS2812_PIN, 800000, false);
+  ws2812_program_init(pio, sm, offset, WS2812_PIN, 800000,   false);
   gpio_set_dir(IRQ_PIN, GPIO_IN);
+  gpio_set_dir(SLEEP_PIN, GPIO_IN);
   gpio_init(25);
   gpio_set_dir(25, GPIO_OUT);
   gpio_pull_down(IRQ_PIN);
+  gpio_pull_down(SLEEP_PIN);
   uart_init(UART_ID, BAUD_RATE);
   gpio_set_irq_enabled_with_callback(IRQ_PIN, GPIO_IRQ_EDGE_RISE, true, interrupt);
   gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
 }
 
+
 void enterSleep() {
+  sleep_ms(1000);
   scb_orig = scb_hw->scr;
   clock0_orig = clocks_hw->sleep_en0;
   clock1_orig = clocks_hw->sleep_en1;
 
   sleep_run_from_xosc();
 
-  sleep_goto_dormant_until_edge_high(IRQ_PIN);
+  sleep_goto_dormant_until_edge_high(SLEEP_PIN);
 
   rosc_write(&rosc_hw->ctrl, ROSC_CTRL_ENABLE_BITS);
   scb_hw->scr = scb_orig;
@@ -134,6 +153,17 @@ void enterSleep() {
   clocks_hw->sleep_en1 = clock1_orig;
 
   clocks_init();
-  stdio_init_all();
-  //setup();
+  sleep_ms(1000);
+
+  //stdio_init_all();
+  setup();
+  
+  sleep_ms(1000);
+  resetVariables();
+  //gpio_put(WS2812_PIN, 0);
+  sleep_ms(80);
+  compareClocks();
+  //clock_configure(clk_sys, CLOCKS_CLK_SYS_CTRL_SRC_VALUE_CLKSRC_CLK_SYS_AUX, CLOCKS_CLK_SYS_CTRL_AUXSRC_VALUE_CLKSRC_PLL_SYS, f_clk_sys, f_clk_sys);
+
+
 }  

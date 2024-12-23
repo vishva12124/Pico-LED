@@ -14,15 +14,15 @@ void runColourFunctions()
 
     switch(mode) {
       case 1:
-        printClocks();
+        //printClocks();
         emitStaticColourAll(r, g, b, 100);
         enterSleep();
-        gpio_put(25, true);
         //compareClocks();
-        r = g = b = 255;
-        brightness = 100;
+        //r = g = b = 255;
+        //brightness = 100;
         irq_flag = false;
-        //break;
+
+        break;
       case 2:
         flashingLights(r, g, b, brightness);
         break;
