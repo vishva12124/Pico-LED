@@ -66,6 +66,7 @@
         "scb.h": "c",
         "powman.h": "c",
         "xosc.h": "c",
-        "system functions.h": "c"
+        "system functions.h": "c",
+        "constants.h": "c"
     }
 }

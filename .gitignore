@@ -1,2 +1,5 @@
 build
 pico-extras
+pico debug commands.txt
+.vscode/launch.json
+.vscode/settings.json
