@@ -1,4 +1,5 @@
 {
+    
     "cmake.options.statusBarVisibility": "hidden",
     "cmake.options.advanced": {
         "build": {
@@ -11,6 +12,22 @@
             "statusBarVisibility": "hidden"
         }
     },
+    "cmake.statusbar.advanced": {
+        "debug": {
+            "visibility": "hidden"
+        },
+        "launch": {
+            "visibility": "hidden"
+        },
+        //"build": {
+        //    "visibility": "hidden"
+        //},
+        //"buildTarget": {
+        //    "visibility": "hidden"
+        //}
+    },
+    "cmake.buildBeforeRun": true,
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",   
     "cmake.configureOnEdit": false,
     "cmake.automaticReconfigure": false,
     "cmake.configureOnOpen": false,

@@ -72,8 +72,8 @@ pico_set_program_version(Pico-LED "0.1")
 pico_generate_pio_header(Pico-LED ${CMAKE_CURRENT_LIST_DIR}/blink.pio)
 
 # Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(Pico-LED 0)
-pico_enable_stdio_usb(Pico-LED 1)
+pico_enable_stdio_uart(Pico-LED 1)
+pico_enable_stdio_usb(Pico-LED 0)
 
 # Add the standard library to the build
 target_link_libraries(Pico-LED
