@@ -16,6 +16,7 @@ void printValues()
 }
 
 void getUserInput() {
+
     uart_read_blocking(UART_ID, (uint8_t *)&stripNumber, 1);
     uart_read_blocking(UART_ID, (uint8_t *)&brightness, 1);
     uart_read_blocking(UART_ID, (uint8_t *) &mode, 1);
@@ -25,15 +26,18 @@ void getUserInput() {
     g = rgb[0] + rgb[1];
     uart_read_blocking(UART_ID, rgb, 2);
     b = rgb[0] + rgb[1];
+    printf("\nInterrupt received");
+    irq_flag = isUartReadable = true;
 }
 
 void interrupt()
 {
+    printf("\nInterrupt received");
     irq_flag = true;
 }
 
 void resetVariables() {
-    irq_flag = false, direction = true;
+    direction = true;
     brightness = mode = r = g = b = 0;
 }
 
@@ -48,13 +52,13 @@ void setup() {
   ws2812_program_init(pio, sm, offset, WS2812_PIN, 800000, false);
   ws2812_program_init(pio, sm2, offset, 0, 800000, false);
 
-  gpio_init(IRQ_PIN);
-  gpio_set_dir(IRQ_PIN, GPIO_IN);
-  gpio_pull_down(IRQ_PIN);
-  gpio_set_irq_enabled(IRQ_PIN, GPIO_IRQ_EDGE_RISE, false);
-  gpio_set_irq_enabled_with_callback(IRQ_PIN, GPIO_IRQ_EDGE_RISE, true, interrupt);
+  //gpio_init(IRQ_PIN);
+  //gpio_set_dir(IRQ_PIN, GPIO_IN);
+  //gpio_pull_down(IRQ_PIN);
+  //gpio_set_irq_enabled(IRQ_PIN, GPIO_IRQ_EDGE_RISE, false);
+  //gpio_set_irq_enabled_with_callback(IRQ_PIN, GPIO_IRQ_EDGE_RISE, true, interrupt);
 
-  gpio_init(SLEEP_PIN);
+  gpio_init(SLEEP_PIN); 
   gpio_set_dir(SLEEP_PIN, GPIO_IN);
   gpio_pull_down(SLEEP_PIN);
   
@@ -66,20 +70,28 @@ void setup() {
   
   uart_init(UART_ID, BAUD_RATE);
   gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
-}
+
+  irq_set_exclusive_handler(UART1_IRQ, getUserInput);
+  irq_set_enabled(UART1_IRQ, true);
+  uart_set_irqs_enabled(UART_ID, true, false);  
+} 
 
 void enterSleep() {
   sleep_ms(1);
+  irq_set_enabled(UART1_IRQ, false);
+
   sleep_run_from_xosc();
 
   sleep_goto_dormant_until_edge_high(SLEEP_PIN);
+  sleep_goto_dormant_until_edge_high(true);
 
   sleep_power_up();
 
   sleep_ms(100);
-  
+  resetVariables();
+
   setup();
   
-  resetVariables();
   turnOffAllLights();
+  sleep_ms(1);
 }  
