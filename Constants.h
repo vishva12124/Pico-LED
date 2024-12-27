@@ -1,13 +1,17 @@
 #ifndef CONSTANTS_H_
 #define CONSTANTS_H_
 
-#define UART_ID uart0
+#define UART_ID uart1
 #define BAUD_RATE 9600
-#define UART_RX_PIN 1
+#define UART_RX_PIN 9
 #define WS2812_PIN 2
 #define IRQ_PIN 3
 #define SLEEP_PIN 4
 #define PIXELS 20
+
+uint8_t rgb[2];
+
+uint8_t stripNumber = 0;
 
 const char NUM_PIXELS = 20;
 

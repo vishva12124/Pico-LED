@@ -4,24 +4,20 @@
 
 void runColourFunctions()
 {
-  while (true) {
-  if (uart_is_readable(UART_ID))
+  while (true)
   {
-    turnOffAllLights();
-    resetVariables();
-    getUserInput();
-    printValues();
+    if (uart_is_readable(UART_ID))
+    {
+      turnOffAllLights();
+      resetVariables();
+      getUserInput();
+      printValues();
 
-    switch(mode) {
+      switch (mode)
+      {
       case 1:
-        //printClocks();
         emitStaticColourAll(r, g, b, 100);
         enterSleep();
-        //compareClocks();
-        //r = g = b = 255;
-        //brightness = 100;
-        irq_flag = false;
-
         break;
       case 2:
         flashingLights(r, g, b, brightness);
@@ -40,13 +36,14 @@ void runColourFunctions()
         break;
       default:
         break;
+      }
     }
   }
-}
 }
 int main()
 {
   setup();
+  turnOffAllLights();
   while (true)
   {
     runColourFunctions();

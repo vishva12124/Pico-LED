@@ -13,9 +13,9 @@ struct LEDValues {
 
 struct LEDValues RGB[PIXELS];
 
-static inline void put_pixel(uint32_t pixel_grb)
+static inline void put_pixel(uint32_t pixel_grb, PIO pioID, int sm)
 {
-  pio_sm_put_blocking(pio0, 0, pixel_grb << 8u);
+  pio_sm_put_blocking(pioID, sm, pixel_grb << 8u);
 }
 
 static inline uint32_t urgb_u32(uint8_t r, uint8_t g, uint8_t b)
@@ -31,13 +31,13 @@ void storeLEDValues(int pixelIndex, int r, int g, int b) {
   RGB[pixelIndex].b = b;
 }
 
-void setColour()
+void setColour(PIO pioID, int sm)
 {
   sleep_ms(1);
   for (int i = 0; i < NUM_PIXELS; i++)
   {
     uint32_t colour_set = urgb_u32((RGB[i].r), (RGB[i].g), (RGB[i].b));
-    put_pixel(colour_set);
+    put_pixel(colour_set, pioID, sm);
   }
 }
 

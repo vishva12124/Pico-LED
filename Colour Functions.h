@@ -12,12 +12,22 @@ void emitStaticColourAll(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
   for (uint8_t x = 0; x != NUM_PIXELS; x++) {
     storeLEDValues(x, r, g, b);
   }
-  setColour();
+  if (stripNumber == 0) {
+    setColour(pio0, 0);
+  }
+  else if (stripNumber == 1) {
+    setColour(pio0, 1);
+  }
 }
 
 void emitStaticColour()
 {
-  setColour();
+  if (stripNumber == 0) {
+    setColour(pio0, 0);
+  }
+  else if (stripNumber == 1) {
+    setColour(pio0, 1);
+  }
 }
 
 void turnOffAllLights()
@@ -26,10 +36,14 @@ void turnOffAllLights()
   {
     storeLEDValues(x, 0, 0, 0);
   }
-  setColour();
+  if (stripNumber == 0) {
+    setColour(pio0, 0);
+  }
+  else if (stripNumber == 1) {
+    setColour(pio0, 1);
+  }
 }
 
-/*
 void flashingLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
 {
   while (irq_flag != true)
@@ -40,17 +54,6 @@ void flashingLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
     sleep_ms(flashingLightDelay);
   }
 }
-*/
-
-void flashingLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
-{
-  while (irq_flag != true) {
-    gpio_put(25, true);
-    sleep_ms(flashingLightDelay);
-    gpio_put(25, false);
-    sleep_ms(flashingLightDelay);
-  }
-}
 
 void updateRGBValues(double time, double frequency) {
   double r_translation = 0.002, g_translation = 1.3, b_translation = 3.1;
@@ -58,6 +61,8 @@ void updateRGBValues(double time, double frequency) {
   rainbow.g = pow((127.5 * (cos(frequency * time + g_translation) + 1)), 0.999);
   rainbow.b = pow((127.5 * (cos(frequency * time + b_translation) + 1)), 0.999);
 }
+
+
 void rainbowLights(uint8_t brightness) {
   double startTime = time_us_32();  
   while (irq_flag == false) {
@@ -67,7 +72,6 @@ void rainbowLights(uint8_t brightness) {
     sleep_ms(40);
   }
 }
-
 
 void fadingLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
 {
@@ -135,7 +139,6 @@ while (irq_flag == false) {
 }
 
 }
-
 
 void patternLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness)
 {
