@@ -1,52 +1,46 @@
+#include "System-Functions/include/System-Functions.h"
 #include "Colour Functions.h"
-#include "System Functions.h"
 #include "Constants.h"
 
-void runColourFunctions()
+int main()
 {
-  while (true)
+  setup();
+  turnOffAllLights(0);
+  turnOffAllLights(1);
+  getUserInput();
+  while (1)
   {
-    turnOffAllLights();
-    //resetVariables();
-    //getUserInput();
+    turnOffAllLights(0);
+    turnOffAllLights(1);
     printValues();
+    measure_freqs();
 
-    irq_flag = isUartReadable = false;
+    irq_flag = uartContainsData = false;
     direction = true;
 
     switch (mode)
     {
     case 1:
-      emitStaticColourAll(r, g, b, 100);
+      emitStaticColourAll(r, g, b, 100, stripNumber);
       enterSleep();
       break;
     case 2:
-      flashingLights(r, g, b, brightness);
+      flashingLights(r, g, b, brightness, stripNumber);
       break;
     case 3:
-      rainbowLights(brightness);
+      rainbowLights(brightness, stripNumber);
       break;
     case 4:
-      fadingLights(r, g, b, brightness);
+      fadingLights(r, g, b, brightness, stripNumber);
       break;
     case 5:
-      patternLights(r, g, b, brightness);
+      patternLights(r, g, b, brightness, stripNumber);
       break;
     case 6:
-      blueAndOrange();
+      blueAndOrange(stripNumber);
       break;
     default:
       break;
     }
-  }
-}
-
-int main()
-{
-  setup();
-  turnOffAllLights();
-  while (true)
-  {
-    runColourFunctions();
   }
 }

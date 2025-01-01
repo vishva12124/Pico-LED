@@ -69,6 +69,7 @@
         "system functions.h": "c",
         "constants.h": "c",
         "runtime_init.h": "c",
-        "ws2812.pio.h": "c"
+        "ws2812.pio.h": "c",
+        "colour functions.h": "c"
     }
 }
