@@ -70,6 +70,7 @@ void resetVariables() {
     brightness = mode = r = g = b = 0;
 }
 
+/*
 void setup() {
   stdio_init_all();
   PIO pio = pio0;
@@ -104,6 +105,18 @@ void setup() {
   irq_set_enabled(UART_IRQ, true);
   uart_set_irqs_enabled(UART_ID, true, false);  
 } 
+*/
+
+void setup() {
+  stdio_init_all();
+  PIO pio = pio0;
+  int sm = 0;
+  int sm2 = 1;
+  uint offset = pio_add_program(pio, &ws2812_program);
+  pio_sm_set_enabled(pio, sm, false);
+  ws2812_program_init(pio, sm, offset, STRIP_1_PIN, 800000, false);
+  ws2812_program_init(pio, sm2, offset, STRIP_2_PIN, 800000, false);
+}
 
 void enterSleep() {
   sleep_ms(1);
@@ -122,8 +135,8 @@ void enterSleep() {
   sleep_ms(100);
   resetVariables();
   setup();
-  turnOffAllLights(0);
-  turnOffAllLights(1);
+  turnOffAllLights(0, STRIP_1_PIXELS);
+  turnOffAllLights(1, STRIP_2_PIXELS);
   sleep_ms(1);
   getUserInput();
 }   

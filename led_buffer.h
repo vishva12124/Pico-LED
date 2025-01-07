@@ -11,7 +11,8 @@ struct LEDValues {
     int b;
 };
 
-struct LEDValues RGB[PIXELS];
+struct LEDValues STRIP_1_RGB[STRIP_1_PIXELS];
+struct LEDValues STRIP_2_RGB[STRIP_2_PIXELS];
 
 static inline void put_pixel(uint32_t pixel_grb, PIO pioID, int sm)
 {
@@ -25,18 +26,31 @@ static inline uint32_t urgb_u32(uint8_t r, uint8_t g, uint8_t b)
          (uint32_t)(b);
 }
 
-void storeLEDValues(int pixelIndex, int r, int g, int b) {
-  RGB[pixelIndex].r = r;
-  RGB[pixelIndex].g = g;
-  RGB[pixelIndex].b = b;
+void storeLEDValues(uint pixelIndex, uint8_t r, uint8_t g, uint8_t b, uint stripNumber) {
+  if (stripNumber == 0) {
+    STRIP_1_RGB[pixelIndex].r = r;
+    STRIP_1_RGB[pixelIndex].g = g;
+    STRIP_1_RGB[pixelIndex].b = b;
+  }
+  else if (stripNumber == 1) {
+    STRIP_2_RGB[pixelIndex].r = r;
+    STRIP_2_RGB[pixelIndex].g = g;
+    STRIP_2_RGB[pixelIndex].b = b;
+  }  
 }
 
-void setColour(PIO pioID, int sm)
+void setColour(PIO pioID, int sm, uint8_t pixelCount, int stripNumber)
 {
   sleep_ms(1);
-  for (int i = 0; i < NUM_PIXELS; i++)
+  uint32_t colour_set;
+  for (int i = 0; i < pixelCount; i++)
   {
-    uint32_t colour_set = urgb_u32((RGB[i].r), (RGB[i].g), (RGB[i].b));
+    if (stripNumber == 0) {
+      colour_set = urgb_u32((STRIP_1_RGB[i].r), (STRIP_1_RGB[i].g), (STRIP_1_RGB[i].b));
+    }
+    else if (stripNumber ==  1) {
+      colour_set = urgb_u32((STRIP_2_RGB[i].r), (STRIP_2_RGB[i].g), (STRIP_2_RGB[i].b));
+    }
     put_pixel(colour_set, pioID, sm);
   }
 }

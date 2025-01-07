@@ -70,6 +70,10 @@
         "constants.h": "c",
         "runtime_init.h": "c",
         "ws2812.pio.h": "c",
-        "colour functions.h": "c"
+        "colour functions.h": "c",
+        "multicore.h": "c",
+        "system-functions.h": "c",
+        "sio.h": "c",
+        "types.h": "c"
     }
 }

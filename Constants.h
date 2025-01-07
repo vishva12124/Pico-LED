@@ -5,10 +5,12 @@
 #define UART_IRQ UART1_IRQ
 #define BAUD_RATE 1000
 #define UART_RX_PIN 9
-#define WS2812_PIN 2
+#define STRIP_1_PIN 2
+#define STRIP_1_PIXELS 20
+#define STRIP_2_PIN 5
+#define STRIP_2_PIXELS 8
 #define IRQ_PIN 3
 #define SLEEP_PIN 4
-#define PIXELS 20
 
 uint8_t rgb[2];
 
