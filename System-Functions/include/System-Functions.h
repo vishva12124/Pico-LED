@@ -62,7 +62,15 @@ void getUserInput() {
     uart_read_blocking(UART_ID, rgb, 2);
     b = rgb[0] + rgb[1];
     printf("\nInterrupt received");
-    irq_flag = uartContainsData = true;
+    if (stripNumber == 1) {
+        //turnOffAllLights(1, STRIP_2_PIXELS);
+        multicore_reset_core1();
+        colourFunctionsForCore1();
+        mode = 0;
+    }
+    else if (stripNumber == 0) {
+        irq_flag = uartContainsData = true;
+    }
 }
 
 void resetVariables() {
@@ -70,7 +78,7 @@ void resetVariables() {
     brightness = mode = r = g = b = 0;
 }
 
-/*
+
 void setup() {
   stdio_init_all();
   PIO pio = pio0;
@@ -78,15 +86,14 @@ void setup() {
   int sm2 = 1;
   uint offset = pio_add_program(pio, &ws2812_program);
   pio_sm_set_enabled(pio, sm, false);
-  ws2812_program_init(pio, sm, offset, WS2812_PIN, 800000, false);
-  ws2812_program_init(pio, sm2, offset, 0, 800000, false);
+  ws2812_program_init(pio, sm, offset, STRIP_1_PIN, 800000, false);
+  ws2812_program_init(pio, sm2, offset, STRIP_2_PIN, 800000, false);
 
   //gpio_init(IRQ_PIN);
   //gpio_set_dir(IRQ_PIN, GPIO_IN);
   //gpio_pull_down(IRQ_PIN);
   //gpio_set_irq_enabled(IRQ_PIN, GPIO_IRQ_EDGE_RISE, false);
   //gpio_set_irq_enabled_with_callback(IRQ_PIN, GPIO_IRQ_EDGE_RISE, true, interrupt);
-
 
   //gpio_init(SLEEP_PIN); 
   //gpio_set_dir(SLEEP_PIN, GPIO_IN);
@@ -105,19 +112,8 @@ void setup() {
   irq_set_enabled(UART_IRQ, true);
   uart_set_irqs_enabled(UART_ID, true, false);  
 } 
-*/
 
-void setup() {
-  stdio_init_all();
-  PIO pio = pio0;
-  int sm = 0;
-  int sm2 = 1;
-  uint offset = pio_add_program(pio, &ws2812_program);
-  pio_sm_set_enabled(pio, sm, false);
-  ws2812_program_init(pio, sm, offset, STRIP_1_PIN, 800000, false);
-  ws2812_program_init(pio, sm2, offset, STRIP_2_PIN, 800000, false);
-}
-
+/*
 void enterSleep() {
   sleep_ms(1);
   irq_set_enabled(UART_IRQ, false);
@@ -140,3 +136,7 @@ void enterSleep() {
   sleep_ms(1);
   getUserInput();
 }   
+*/
+void enterSleep() {
+    __wfe();
+}

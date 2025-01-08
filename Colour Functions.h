@@ -22,16 +22,16 @@ void emitStaticColour(uint8_t stripNumber, uint8_t pixelCount)
 
 void turnOffAllLights(uint8_t stripNumber, uint8_t pixelCount)
 {
-  for (uint8_t x = 0; x < NUM_PIXELS; x++)
+  for (uint8_t x = 0; x < pixelCount; x++)
   {
     storeLEDValues(x, 0, 0, 0, stripNumber);
   }
   setColour(pio0, stripNumber, pixelCount, stripNumber);
 }
 
-void flashingLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness, uint8_t stripNumber, uint8_t pixelCount)
+void flashingLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness, uint8_t stripNumber, uint8_t pixelCount, bool irq_enabled)
 {
-  while (irq_flag == false)
+  while (irq_flag == false || irq_enabled == false)
   {
     emitStaticColourAll(r, g, b, brightness, stripNumber, pixelCount);
     sleep_ms(flashingLightDelay);
@@ -48,9 +48,9 @@ void updateRGBValues(double time, double frequency) {
 }
 
 
-void rainbowLights(uint8_t brightness, uint8_t stripNumber, uint8_t pixelCount) {
+void rainbowLights(uint8_t brightness, uint8_t stripNumber, uint8_t pixelCount, bool irq_enabled) {
   double startTime = time_us_32();  
-  while (irq_flag == false) {
+  while (irq_flag == false || irq_enabled == false) {
     double timeDifference = time_us_32() - startTime;
     updateRGBValues(timeDifference, 0.005);
     emitStaticColourAll(rainbow.r, rainbow.g, rainbow.b, 100, stripNumber, pixelCount);
@@ -58,26 +58,31 @@ void rainbowLights(uint8_t brightness, uint8_t stripNumber, uint8_t pixelCount) 
   }
 }
 
-void fadingLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness, uint8_t stripNumber, uint8_t pixelCount)
+void fadingLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness, uint8_t stripNumber, uint8_t pixelCount, bool irq_enabled)
 {
-  
-  while (irq_flag == false) {
+  uint8_t rgb[2][3];
+
+  rgb[stripNumber][0] = r;
+  rgb[stripNumber][1] = g;
+  rgb[stripNumber][2] = b;
+
+  while (irq_flag == false || irq_enabled == false) {
     for (uint8_t x = 0; x != 250; x++) {
-      switch (r) {
+      switch (rgb[stripNumber][0]) {
         case 0:
           break;
         default:
           r--;
           break;
       }
-      switch (g) {
+      switch (rgb[stripNumber][1]) {
         case 0:
           break;
         default:
           g--;
           break;
       }
-      switch (b) {
+      switch (rgb[stripNumber][2]) {
         case 0:
           break;
         default:
@@ -88,21 +93,21 @@ void fadingLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness, uint8_t s
         sleep_ms(fadingLightDelay);
     }
     for (uint8_t x = 250; x > 0; x--) {
-      switch (r) {
+      switch (rgb[stripNumber][0]) {
         case 0:
           break;
         default:
           r++;
           break;
       }
-      switch (g) {
+      switch (rgb[stripNumber][1]) {
         case 0:
           break;
         default:
           g++;
           break;
       }
-      switch (b) {
+      switch (rgb[stripNumber][2]) {
         case 0:
           break;
         default:
@@ -115,8 +120,8 @@ void fadingLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness, uint8_t s
   }
 }
 
-void blueAndOrange(uint8_t stripNumber, uint8_t pixelCount) {
-while (irq_flag == false) {
+void blueAndOrange(uint8_t stripNumber, uint8_t pixelCount, bool irq_enabled) {
+while (irq_flag == false || irq_enabled == false) {
   emitStaticColourAll(0, 0, 255, 100, stripNumber, pixelCount);
   sleep_ms(blueAndOrangeDelay);
   emitStaticColourAll(255, 106, 10, 100, stripNumber, pixelCount);
@@ -125,12 +130,12 @@ while (irq_flag == false) {
 
 }
 
-void patternLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness, uint8_t stripNumber, uint8_t pixelCount)
+void patternLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness, uint8_t stripNumber, uint8_t pixelCount, bool irq_enabled)
 {
   turnOffAllLights(stripNumber, pixelCount);
   uint8_t x = 0, i = 1;
   direction = true;
-  while (irq_flag == false)
+  while (irq_flag == false || irq_enabled == false)
   {
     storeLEDValues(i, r, g, b, stripNumber);
     emitStaticColour(stripNumber, pixelCount);
@@ -138,10 +143,10 @@ void patternLights(uint8_t r, uint8_t g, uint8_t b, uint8_t brightness, uint8_t 
     emitStaticColour(stripNumber, pixelCount);
     sleep_ms(patternLightDelay);
 
-    if (i == NUM_PIXELS)
+    if (i == pixelCount)
     {
       direction = false;
-      x = NUM_PIXELS + 1;
+      x = pixelCount + 1;
     }
     else if (i == 0 && direction == false)
     {
