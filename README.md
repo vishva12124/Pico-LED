@@ -72,13 +72,16 @@ UART RX Pin
 - GPIO 1
 <br />
 
-Strip 1 TX Pin = GPIO 2
+Strip 1 TX Pin:
+- GPIO 2
 <br />
 
-Strip 2 TX Pin = GPIO 5
+Strip 2 TX Pin:
+- GPIO 5
 <br />
 
-Baud rate = 1000
+Baud rate:
+- 1000
 <br />
 
 
