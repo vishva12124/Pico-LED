@@ -67,6 +67,7 @@ Hardware APIs Used:
 - Multicore
 - Watchdog timer (to be implemented)
 - ADC (to be implemented)
+<br />
 
 UART RX Pin
 - GPIO 1
