@@ -47,42 +47,35 @@ A command is sent in this order (do not have any spaces in the input):<br />
 # **System Information** #
 <br />
 
-Microcontroller:
+**Microcontroller:**
 - Raspberry Pi Pico (RP2040)
-<br />
 
-Language:
+**Language:**
 - C
-<br />
 
-External Libraries: 
+**External Libraries: **
 - pico-sdk
 - pico-extras
-<br />
 
-Hardware APIs Used:
+**Hardware APIs Used:**
 - UART
 - PIO
 - IRQ
 - Multicore
 - Watchdog timer (to be implemented)
 - ADC (to be implemented)
-<br />
 
-UART RX Pin
-- GPIO 1
-<br />
+**UART RX Pin**
+  - GPIO 1
 
-Strip 1 TX Pin:
-- GPIO 2
-<br />
+**Strip 1 TX Pin:**
+  - GPIO 2
 
-Strip 2 TX Pin:
-- GPIO 5
-<br />
+**Strip 2 TX Pin:**
+  - GPIO 5
 
-Baud rate:
-- 1000
+**Baud rate:**
+  - 1000
 <br />
 
 
